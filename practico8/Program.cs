@@ -119,8 +119,22 @@ string? rutaCarpeta;
 Console.WriteLine("Ingrese la ruta de una carpeta: ");
 rutaCarpeta = Console.ReadLine();
 
-string[] listaDeArchivos = Directory.GetFiles(rutaCarpeta);
-foreach (var archivo in listaDeArchivos)
+if (Directory.Exists(rutaCarpeta))
 {
-    Console.WriteLine(archivo);
+    string[] listaDeArchivos = Directory.GetFiles(rutaCarpeta);
+    foreach (var archivo in listaDeArchivos)
+    {
+        Console.WriteLine(archivo);
+    }
+    using (StreamWriter archivoCsv = new StreamWriter("index.csv"))
+    {
+        archivoCsv.WriteLine("Índice,Nombre,Extensión");
+
+        for (int i = 0; i < listaDeArchivos.Count(); i++)
+        {
+            archivoCsv.WriteLine($"{i+1},{Path.GetFileNameWithoutExtension(listaDeArchivos[i])},{Path.GetExtension(listaDeArchivos[i])}");
+        }
+
+        archivoCsv.Close();
+    }
 }
